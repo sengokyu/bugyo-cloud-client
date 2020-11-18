@@ -2,6 +2,12 @@
 
 OBC 奉行クラウド Pythonクライアント
 
+# Testing
+
+```console
+poetry run pytest
+```
+
 # API
 
 ## 打刻
@@ -24,4 +30,6 @@ OBC 奉行クラウド Pythonクライアント
 
 * "ClockIn" : 出勤
 * "ClockOut" : 退出
+
+
 

@@ -1,0 +1,7 @@
+__title__ = 'bugyocloudclient'
+__description__ = 'OBC Bugyo Cloud HTTP client.'
+__url__ = 'https://github.com/sengokyu/bugyocloudclient'
+__version__ = '0.0.1'
+__author__ = 'sengokyu'
+__license__ = 'MIT'
+__copyright__ = 'Copyright 2020 sengokyu'

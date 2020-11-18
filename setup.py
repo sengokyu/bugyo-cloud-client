@@ -1,19 +1,29 @@
-from os import name, path
-from codecs import open
-from distutils.core import setup
+from setuptools import setup, find_packages
+from bugyocloudclient import __version__ as version
 
-package_name = 'bugyo-cloud-client'
+package_name = 'bugyocloudclient'
 
-root_dir = path.abspath(path.dirname(__file__))
+with open('README.md', 'r') as fh:
+    long_description = fh.read()
 
-
-def _readfile(filename):
-    return [name.rstrip() for name in open(filename).readlines()]
-
-
-def _requirements():
-    return _readfile(path.join(root_dir, 'requirements.txt'))
-
-
-def _test_requirements():
-    return _readfile(path.join(root_dir, 'test-requirements.txt'))
+setup(
+    name=version.__title__,
+    version=version.__version__,
+    author=version.__author__,
+    description=version.__description__,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url=version.__url__,
+    packages=find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.6',
+    install_requires=[
+        'requests',
+        'beautifulsoup4',
+    ],
+    # test_suites='tests',
+)
