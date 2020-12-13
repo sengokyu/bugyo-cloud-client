@@ -1,13 +1,13 @@
 from ..bugyocloudclient import BugyoCloudClient
 from ..utils.baserequest import BaseRequest
-from .loginpageparser import LoginPageParser
+from ..utils.loginpageparser import LoginPageParser
 
 
 class LoginPage:
     """ ログインページ読み込みます """
 
     def __init__(self, client: BugyoCloudClient) -> None:
-        self.client = client
+        self.__client = client
 
         parser = LoginPageParser(self.__load())
 
@@ -15,10 +15,10 @@ class LoginPage:
         self.token_value = parser.token_value
 
     def __load(self) -> str:
-        req = BaseRequest('GET', self.client.login_url)
-        prepped = self.client.prepare_request(req)
+        req = BaseRequest('GET', self.__client.login_url)
+        prepped = self.__client.prepare_request(req)
 
-        resp = self.client.send(prepped)
+        resp = self.__client.send(prepped)
         resp.raise_for_status()
 
         return resp.content.decode(BugyoCloudClient.ENCODING)

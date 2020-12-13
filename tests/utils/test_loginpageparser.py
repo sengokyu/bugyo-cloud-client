@@ -1,9 +1,7 @@
-from unittest import TestCase
-
-from bugyocloudclient.endpoints.loginpageparser import LoginPageParser
+from bugyocloudclient.utils.loginpageparser import LoginPageParser
 
 
-class TestLoginPargeParser(TestCase):
+class TestLoginPargeParser():
     CONTENT = '''\
     <form id="loginform" action="http://example.com/">
     <input name="__RequestVerificationToken" value="token value">
@@ -15,7 +13,7 @@ class TestLoginPargeParser(TestCase):
         instance = LoginPageParser(TestLoginPargeParser.CONTENT)
 
         # Then
-        self.assertIsInstance(instance, LoginPageParser)
+        assert isinstance(instance, LoginPageParser)
 
     def test_init(self) -> None:
         """ コンテンツをパース """
@@ -23,5 +21,5 @@ class TestLoginPargeParser(TestCase):
         instance = LoginPageParser(TestLoginPargeParser.CONTENT)
 
         # Then
-        self.assertEqual('http://example.com', instance.action)
-        self.assertEqual('token value', instance.token_value)
+        assert instance.action == 'http://example.com/'
+        assert instance.token_value == 'token value'

@@ -1,15 +1,14 @@
-import unittest
-import os
 from bugyocloudclient import BugyoCloudClient
 
 
-class BugyoCloudClientTests(unittest.TestCase):
+class BugyoCloudClientTests():
     LOGIN_URL = 'https://example.com/foobar'
-    instance: BugyoCloudClient
-
-    def setUp(self) -> None:
-        self.instance = BugyoCloudClient(self.LOGIN_URL)
+    LOGIN_ID = 'login id'
 
     def test_create_instance(self) -> None:
+        # When
+        actual = BugyoCloudClient(
+            BugyoCloudClientTests.LOGIN_URL, BugyoCloudClientTests.LOGIN_ID)
+
         # Then
-        self.assertIsInstance(self.instance, BugyoCloudClient)
+        assert isinstance(actual, BugyoCloudClient)
