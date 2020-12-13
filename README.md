@@ -32,4 +32,6 @@ poetry run pytest
 * "ClockOut" : 退出
 
 
-
+```console
+poetry run pytest
+```
