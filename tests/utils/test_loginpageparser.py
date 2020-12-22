@@ -10,16 +10,19 @@ class TestLoginPargeParser():
     def test_create_instance(self) -> None:
         """ インスタンスを生成 """
         # When
-        instance = LoginPageParser(TestLoginPargeParser.CONTENT)
+        instance = LoginPageParser()
 
         # Then
         assert isinstance(instance, LoginPageParser)
 
-    def test_init(self) -> None:
+    def test_parse(self) -> None:
         """ コンテンツをパース """
+        # Given
+        instance = LoginPageParser()
+
         # When
-        instance = LoginPageParser(TestLoginPargeParser.CONTENT)
+        (action, token) = instance.parse(TestLoginPargeParser.CONTENT)
 
         # Then
-        assert instance.action == 'http://example.com/'
-        assert instance.token_value == 'token value'
+        assert action == 'http://example.com/'
+        assert token == 'token value'

@@ -1,45 +1,53 @@
+from bugyocloudclient.authinfo import AuthInfo
 from requests.models import Response
-from ..bugyocloudclient import BugyoCloudClient, BugyoCloudClientError
-from ..utils.baserequest import BaseRequest
+
+from ..core import BugyoCloudClient, BugyoCloudClientError
+from ..utils.formpostrequest import FormPostRequest
+from .loginpage import LoginPage
 
 
-class Authenticate(object):
+class Authenticate(FormPostRequest):
     """ 認証します """
 
-    def __init__(self, client: BugyoCloudClient, auth_url: str) -> None:
-        self.client = client
-        self.auth_url = auth_url
+    def __init__(self, client: BugyoCloudClient, login_page: LoginPage):
+        self.__client = client
+        self.__token_value = login_page.token_value
+        self.__top_url = ''
+        super().__init__(login_page.action)
 
-    def post(self, token: str, password: str) -> None:
-        self.__parse_response(self.__post_auth_info(token, password))
+    @property
+    def top_url(self) -> str:
+        return self.__top_url
 
-    def __post_auth_info(self, token: str, password: str) -> Response:
+    def call(self, auth_info: AuthInfo):
+        response = self.__post_auth_info(
+            auth_info.login_id, auth_info.password)
+        self.__parse_response(response)
+
+    def __post_auth_info(self, login_id: str, password: str) -> Response:
         data = {
             'btnLogin': None,
-            'OBCID': self.client.login_id,
+            'OBCID': login_id,
             'Password_d1': None,
             'Password_d2': None,
             'Password_d3': None,
             'Password': password,
-            '__RequestVerificationToken': token,
+            '__RequestVerificationToken': self.__token_value,
             'X-Requested-With': 'XMLHttpRequest'
         }
-        req = BaseRequest('POST', self.auth_url)
-        prepped = self.client.prepare_request(req)
-
-        prepped.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        prepped = self.__client.prepare_request(self)
         prepped.data = data
 
-        resp = self.client.send(prepped)
+        resp = self.__client.send(prepped)
         resp.raise_for_status()
 
         return resp
 
-    def __parse_response(self, resp: Response) -> None:
-        json = resp.json
+    def __parse_response(self, response: Response) -> None:
+        json = response.json
 
         if 'RedirectURL' in json:
-            self.redirect_url = resp.json['RedirectURL']
+            self.__top_url = json['RedirectURL']
         else:
             raise BugyoCloudClientError(
                 'Response is not to be expected.', json)

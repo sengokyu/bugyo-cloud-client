@@ -1,18 +1,18 @@
-from bugyocloudclient.bugyocloudclient import BugyoCloudClientError
+from typing import Tuple
+from ..core import BugyoCloudClientError
 from bs4 import BeautifulSoup
 
 
 class LoginPageParser:
     """ ログインページのパーサです。 """
 
-    def __init__(self, html: str):
-        self.bs = BeautifulSoup(html, 'html.parser')
-        self.action = self.__parse_action()
-        self.token_value = self.__parse_token()
+    def parse(self, html: str) -> Tuple[str, str]:
+        bs = BeautifulSoup(html, 'html.parser')
+        return (self.__parse_action(bs), self.__parse_token(bs))
 
-    def __parse_action(self) -> str:
+    def __parse_action(self, bs: BeautifulSoup) -> str:
         """ 認証用URLを返す """
-        loginform_ele = self.bs.select_one('#loginform')
+        loginform_ele = bs.select_one('#loginform')
         if (loginform_ele is None):
             raise BugyoCloudClientError(
                 'Cannot find an element of #loginform ')
@@ -24,10 +24,10 @@ class LoginPageParser:
 
         return action
 
-    def __parse_token(self) -> str:
+    def __parse_token(self, bs: BeautifulSoup) -> str:
         """ __RequestVerificationTokenを返す """
 
-        token_ele = self.bs.select_one(
+        token_ele = bs.select_one(
             'input[name=__RequestVerificationToken]')
         if (token_ele is None):
             raise BugyoCloudClientError(

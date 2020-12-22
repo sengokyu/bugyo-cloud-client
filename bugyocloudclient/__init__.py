@@ -1,1 +1,1 @@
-from .bugyocloudclient import *
+from .core import *
