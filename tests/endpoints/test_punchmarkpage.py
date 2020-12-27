@@ -1,26 +1,29 @@
 from bugyocloudclient import BugyoCloudClient
-from bugyocloudclient.endpoints.loginpage import LoginPage
+from bugyocloudclient.endpoints.punchmarkpage import PunchmarkPage
 from bugyocloudclient.models.clientparam import ClientParam
-from requests import Response
+from requests.models import Response
 
 
-class TestLoginPage():
+class TestPunchmarkPage():
+
     def test_create_instance(self, mocker) -> None:
         # When
-        instance = LoginPage()
+        instance = PunchmarkPage()
 
         # Then
-        assert isinstance(instance, LoginPage)
+        assert isinstance(instance, PunchmarkPage)
 
     def test_call(self, mocker) -> None:
-        """ パースしてtoken_valueがセットされる """
+        """ パースしてtoken_valueが返ります。 """
         # Given
-        instance = LoginPage()
+        instance = PunchmarkPage()
         client = mocker.Mock(spec=BugyoCloudClient)
         resp = mocker.Mock(Response)
         tenant_code = 'tete'
+        user_code = 'usus'
         param = ClientParam(tenant_code)
-        content = '<input type="hidden" name="__RequestVerificationToken" value="one token">'
+        param.user_code = user_code
+        content = '<input type="hidden" name="__RequestVerificationToken" value="a token">'
 
         resp.content = bytearray(content, 'utf-8')
         client.session.get.return_value = resp
@@ -30,6 +33,7 @@ class TestLoginPage():
         actual = instance.call(client)
 
         # Then
-        assert actual == 'one token'
-        expected_url = 'https://id.obc.co.jp/{0}'.format(tenant_code)
+        assert actual == 'a token'
+        expected_url = 'https://hromssp.obc.jp/{0}/{1}/timeclock/punchmark/'.format(
+            tenant_code, user_code)
         client.session.get.assert_called_once_with(expected_url)

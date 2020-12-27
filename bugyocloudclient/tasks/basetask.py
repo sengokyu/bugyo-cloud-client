@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from ..core import BugyoCloudClient
 
 
-class ABTask(ABC):
+class BaseTask(ABC):
     """ タスクのinterfaceです。抽象基底クラス(ABC) にしています。 """
 
     def prepare(self, client: 'BugyoCloudClient'):

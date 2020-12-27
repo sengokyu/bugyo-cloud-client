@@ -1,31 +1,30 @@
-from ..authinfo import AuthInfo
-from ..core import BugyoCloudClient
-from ..endpoints.authenticate import Authenticate
-from ..endpoints.checkauthenticationmethod import CheckAuthenticationMethod
-from ..endpoints.loginpage import LoginPage
-from ..tasks.abtask import ABTask
-from ..utils.loginpageparser import LoginPageParser
+from bugyocloudclient.core import BugyoCloudClient
+from bugyocloudclient.endpoints.authenticate import Authenticate
+from bugyocloudclient.endpoints.checkauthenticationmethod import \
+    CheckAuthenticationMethod
+from bugyocloudclient.endpoints.loginpage import LoginPage
+from bugyocloudclient.endpoints.toppage import TopPage
+from bugyocloudclient.models.authinfo import AuthInfo
+from bugyocloudclient.tasks.basetask import BaseTask
 
 
-class LoginTask(ABTask):
+class LoginTask(BaseTask):
     """ ログインします """
 
     def __init__(self, auth_info: AuthInfo):
-        self.__top_url = ''
         self.__auth_info = auth_info
 
-    @property
-    def top_url(self) -> str:
-        return self.__top_url
-
     def execute(self, client: BugyoCloudClient) -> None:
-        login_page = LoginPage(client, LoginPageParser())
-        login_page.call()
+        login_page = LoginPage()
+        token = login_page.call(client)
 
-        check_auth_method = CheckAuthenticationMethod(client)
-        check_auth_method.call(self.__auth_info)
+        check_auth_method = CheckAuthenticationMethod()
+        check_auth_method.call(client, self.__auth_info)
 
-        authenticate = Authenticate(client, login_page)
-        authenticate.call(self.__auth_info)
+        authenticate = Authenticate()
+        redirect_url = authenticate.call(client, token, self.__auth_info)
 
-        self.__top_url = authenticate.top_url
+        top_page = TopPage()
+        user_code = top_page.call(client, redirect_url)
+
+        client.param.user_code = user_code

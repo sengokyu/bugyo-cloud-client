@@ -1,28 +1,23 @@
-from ..authinfo import AuthInfo
-from ..core import BugyoCloudClient
-from ..utils.formpostrequest import FormPostRequest
+from bugyocloudclient import BugyoCloudClient
+from bugyocloudclient.models.authinfo import AuthInfo
+from bugyocloudclient.utils.urlproducer import produce_url
 
 
-class CheckAuthenticationMethod(FormPostRequest):
-    """ 'session'クッキーをclientに読ませる """
+class CheckAuthenticationMethod(object):
+    """ 
+    'session'クッキーをclientに読ませる
+     """
 
-    def __init__(self, client: BugyoCloudClient):
-        self.__client = client
-        super().__init__(self.__build_url())
-
-    def call(self, auth_info: AuthInfo) -> None:
-        self.__prepare_session_cookie(auth_info.login_id)
-
-    def __prepare_session_cookie(self, login_id: str) -> None:
-        prepped = self.__client.prepare_request(self)
-
-        prepped.data = {
-            'OBCiD': login_id,
+    def call(self, client: BugyoCloudClient, auth_info: AuthInfo) -> None:
+        url = self.__get_url(client)
+        data = {
+            'OBCiD': auth_info.login_id,
             'isBugyoCloud': 'false'
         }
 
-        resp = self.__client.send(prepped)
+        resp = client.session.post(url=url, data=data)
         resp.raise_for_status()
 
-    def __build_url(self) -> str:
-        return ('https://id.obc.co.jp/', self.__client.tenant_code, '/login/CheckAuthenticationMethod')
+    def __get_url(self, client: BugyoCloudClient) -> str:
+        key = type(self).__name__
+        return produce_url(key, client.param)

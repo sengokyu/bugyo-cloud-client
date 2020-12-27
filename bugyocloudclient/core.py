@@ -1,5 +1,7 @@
-from .tasks.abtask import ABTask
 from requests import Session
+
+from bugyocloudclient.models.clientparam import ClientParam
+from bugyocloudclient.tasks.basetask import BaseTask
 
 
 class BugyoCloudClientError(Exception):
@@ -7,18 +9,28 @@ class BugyoCloudClientError(Exception):
     pass
 
 
-class BugyoCloudClient(Session):
+class BugyoCloudClient(object):
     """ 奉行クラウドHTTPクライアント """
-    USER_AGENT = 'Mozilla/5.0 ()'
-    ENCODING = 'utf-8'
 
     def __init__(self, tenant_code: str):
-        self.__tenant_code = tenant_code
-        super().__init__()
+        self.__param = ClientParam(tenant_code)
+        self.__session = self.__create_session()
 
     @property
-    def tenant_code(self):
-        return self.__tenant_code
+    def session(self) -> Session:
+        return self.__session
 
-    def exec(self, abtask: ABTask) -> None:
-        abtask.execute(self)
+    @property
+    def param(self) -> ClientParam:
+        return self.__param
+
+    def exec(self, task: BaseTask) -> None:
+        """ タスクを実行します。 """
+        task.execute(self)
+
+    def __create_session(self) -> Session:
+        session = Session()
+        session.headers = {
+            'User-Agent': BugyoCloudClient.USER_AGENT
+        }
+        return session
