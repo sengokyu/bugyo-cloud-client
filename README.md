@@ -118,7 +118,7 @@ poetry run pytest
   * "LaborSystemCode" : ""
   * "LaborSystemName" : ""
   * "PositionLatitude" : 緯度
-  * "PositionLongtitude" : 経度
+  * "PositionLongitude" : 経度
   * "PositionAccuracy" : "0"
 
 ### 打刻種類
