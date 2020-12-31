@@ -45,6 +45,8 @@ class TestAuthenticate:
 
         args, kwargs = client.session.post.call_args
 
+        assert len(args) == 0
+        assert len(kwargs) == 2
         assert kwargs['url'] == 'https://id.obc.jp/{0}/login/login/?Length=5'.format(
             tenant_code)
         assert kwargs['data']['__RequestVerificationToken'] == token
