@@ -28,6 +28,15 @@ poetry install
 poetry run pytest
 ```
 
+# Build & Publish
+
+```console
+poetry buid
+poetry publish -r testpypi
+poetry publish
+```
+
+
 # 画面あるいはAPI
 
 ## 認証画面

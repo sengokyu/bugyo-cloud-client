@@ -1,9 +1,11 @@
 [tool.poetry]
-name = "bugyo-cloud-client"
-version = "0.1.0"
-description = ""
+name = "bugyocloudclient"
+version = "0.1.1"
+description = "Bugyo Cloud Client"
 authors = ["sengokyu <sengokyu+gh@gmail.com>"]
 license = "MIT"
+homepage = "https://github.com/sengokyu/bugyo-cloud-client"
+repository = "https://github.com/sengokyu/bugyo-cloud-client"
 
 [tool.poetry.dependencies]
 python = "^3.8"
