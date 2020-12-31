@@ -40,6 +40,11 @@ class TestTimeClock(object):
 
         args, kwargs = client.session.post.call_args
 
+        assert len(args) == 0
+        assert len(kwargs) == 3
         assert kwargs['url'] == 'https://hromssp.obc.jp/{0}/{1}/TimeClock/InsertReadDateTime/'.format(
             tenant_code, user_code)
+        assert len(kwargs['headers']) == 1
+        assert kwargs['headers']['__RequestVerificationToken'] == token
+        assert len(kwargs['data']) == 7
         assert kwargs['data']['ClockType'] == 'ClockIn'

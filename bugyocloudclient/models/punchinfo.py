@@ -17,6 +17,8 @@ class PunchInfo(object):
         cTor
         """
         self.__clock_type = None
+        self.__latitude = 0
+        self.__longitude = 0
 
     @property
     def clock_type(self) -> ClockType:
@@ -25,3 +27,19 @@ class PunchInfo(object):
     @clock_type.setter
     def clock_type(self, value: ClockType) -> None:
         self.__clock_type = value
+
+    @property
+    def latitude(self) -> float:
+        return self.__latitude
+
+    @latitude.setter
+    def latitude(self, value: float) -> None:
+        self.__latitude = value
+
+    @property
+    def longitude(self) -> float:
+        return self.__longitude
+
+    @longitude.setter
+    def longitude(self, value: float) -> None:
+        self.__longitude = value
