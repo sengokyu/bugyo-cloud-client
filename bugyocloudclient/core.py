@@ -1,5 +1,6 @@
 from requests import Session
 
+from bugyocloudclient.config import USER_AGENT
 from bugyocloudclient.models.clientparam import ClientParam
 from bugyocloudclient.tasks.basetask import BaseTask
 
@@ -31,6 +32,6 @@ class BugyoCloudClient(object):
     def __create_session(self) -> Session:
         session = Session()
         session.headers = {
-            'User-Agent': BugyoCloudClient.USER_AGENT
+            'User-Agent': USER_AGENT
         }
         return session

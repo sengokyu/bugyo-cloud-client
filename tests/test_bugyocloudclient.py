@@ -4,7 +4,7 @@ from bugyocloudclient.models.clientparam import ClientParam
 from requests import Session
 
 
-class BugyoCloudClientTests():
+class TestBugyoCloudClient():
     def test_create_instance(self) -> None:
         # Given
         tenant_code = 'tete'
