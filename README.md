@@ -2,6 +2,37 @@
 
 OBC 奉行クラウド Pythonクライアント
 
+# Usage
+
+BugyoCloudClientのインスタンスを作成します。
+
+```python
+import bugyocloudclient as bcc
+
+
+tenant_code = 'The first part of URL path.'
+client = bcc.BugyoCloudClient(tenant_code)
+```
+
+最初にLoginTaskを実行して、ログイン状態にします。
+
+```python
+auth_info = bcc.AuthInfo('login id', 'password')
+login_task = bcc.LoginTask(auth_info)
+client.exec(login_task)
+```
+
+ログインしてから、別のタスクを実行します。
+（今は打刻タスクしかありません）。
+
+```python
+punch_info = bcc.PunchInfo()
+punch_info.clock_type = clock_type
+punch_task = bcc.PunchTask(punch_info)
+client.exec(punch_task)
+```
+
+
 # Installing poetry
 
 ```console
