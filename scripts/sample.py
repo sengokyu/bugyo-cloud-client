@@ -2,6 +2,7 @@
 #
 #
 from argparse import ArgumentParser
+
 import bugyocloudclient as bcc
 
 
@@ -33,12 +34,15 @@ def create_punch_task(clock_type: bcc.ClockType) -> bcc.PunchTask:
 def main():
     parser = create_parser()
     args = parser.parse_args()
+    tenant_code = args.tenant_code.pop()
+    login_id = args.login_id.pop()
+    password = args.password.pop()
 
     # Create Bugyo Cloud Client
-    client = create_client(args['tenant_code'])
+    client = create_client(tenant_code)
 
     # Create tasks
-    login_task = create_login_task(args['login_i'], args['password'])
+    login_task = create_login_task(login_id, password)
     punch_task = create_punch_task(bcc.ClockType.clock_in)
 
     # Execute login task
