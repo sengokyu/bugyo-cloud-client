@@ -16,6 +16,8 @@ requests = "^2.25.0"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.0"
 pytest-mock = "^3.3.1"
+pylint = "^2.6.0"
+autopep8 = "^1.5.4"
 
 [tool.poetry.scripts]
 
