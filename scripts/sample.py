@@ -1,9 +1,12 @@
 # BugyoCloudClient usage sample
 #
 #
+import logging
 from argparse import ArgumentParser
 
 import bugyocloudclient as bcc
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 def create_parser() -> ArgumentParser:
