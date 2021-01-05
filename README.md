@@ -150,8 +150,10 @@ poetry publish
 * URL: https://hromssp.obc.jp/{{テナント？}}/{{ユーザ初期画面URLより}}/TimeClock/InsertReadDateTime/
 * METHOD: POST
 * Headers:
-  * __RequestVerificationToken: 打刻画面にあるinput hidden value
-  * Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+  * "__RequestVerificationToken": 打刻画面にあるinput hidden value
+  * "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+  * "X-Requested-With" : "XMLHttpRequest"
+  * "Referer" : 打刻画面のURL
 * Content:
   * "ClockType" : 打刻種類
   * "LaborSystemID" : "0"
@@ -163,6 +165,6 @@ poetry publish
 
 ### 打刻種類
 
-* "ClockIn" : 出勤
-* "ClockOut" : 退出
+* 出勤 = "ClockIn"
+* 退出 = "ClockOut"
 
