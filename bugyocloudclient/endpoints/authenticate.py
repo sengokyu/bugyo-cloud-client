@@ -1,7 +1,12 @@
-from bugyocloudclient.utils.urlproducer import produce_url
+from logging import getLogger
+
 from bugyocloudclient import BugyoCloudClient, BugyoCloudClientError
+from bugyocloudclient.config import CONTENT_ENCODING
 from bugyocloudclient.models.authinfo import AuthInfo
+from bugyocloudclient.utils.urlproducer import produce_url
 from requests import Response
+
+logger = getLogger(__name__)
 
 
 class Authenticate(object):
@@ -11,6 +16,9 @@ class Authenticate(object):
         """ RedirectURLを返します。 """
         url = self.__get_url(client)
         data = self.__create_data(token, auth_info)
+
+        logger.debug('Trying to POST. url=%s data=%s', url, data)
+
         resp = client.session.post(url=url, data=data)
         resp.raise_for_status()
 
@@ -29,13 +37,14 @@ class Authenticate(object):
         }
 
     def __parse_response(self, response: Response) -> None:
-        json = response.json
+        json = response.json()
 
         if 'RedirectURL' in json:
             return json['RedirectURL']
         else:
-            raise BugyoCloudClientError(
-                'Response is not to be expected.', json)
+            content = response.content
+            logger.critical('Response is not to be expected. content=%s', content)
+            raise BugyoCloudClientError('Response is not to be expected.')
 
     def __get_url(self, client: BugyoCloudClient) -> str:
         key = type(self).__name__

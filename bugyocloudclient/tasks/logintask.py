@@ -19,7 +19,7 @@ class LoginTask(BaseTask):
         token = login_page.call(client)
 
         check_auth_method = CheckAuthenticationMethod()
-        check_auth_method.call(client, self.__auth_info)
+        check_auth_method.call(client, token, self.__auth_info)
 
         authenticate = Authenticate()
         redirect_url = authenticate.call(client, token, self.__auth_info)

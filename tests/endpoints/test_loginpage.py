@@ -31,5 +31,5 @@ class TestLoginPage():
 
         # Then
         assert actual == 'one token'
-        expected_url = 'https://id.obc.co.jp/{0}'.format(tenant_code)
+        expected_url = 'https://id.obc.jp/{0}'.format(tenant_code)
         client.session.get.assert_called_once_with(expected_url)

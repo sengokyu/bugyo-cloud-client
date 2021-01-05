@@ -29,7 +29,7 @@ class TestAuthenticate:
         tenant_code = 'ttt'
         param = ClientParam(tenant_code)
 
-        resp.json = {
+        resp.json.return_value = {
             'RedirectURL': redirect_url
         }
         client.session.post.return_value = resp
@@ -42,13 +42,21 @@ class TestAuthenticate:
         assert actual == redirect_url
 
         client.session.post.assert_called_once()
-
+        expected_args = ()
+        expected_kwargs = {
+            'url': 'https://id.obc.jp/{0}/login/login/?Length=5'.format(
+                tenant_code),
+            'data': {
+                '__RequestVerificationToken': token,
+                'OBCID': login_id,
+                'Password': password,
+                'btnLogin': None,
+                'Password_d1': None,
+                'Password_d2': None,
+                'Password_d3': None,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        }
         args, kwargs = client.session.post.call_args
-
-        assert len(args) == 0
-        assert len(kwargs) == 2
-        assert kwargs['url'] == 'https://id.obc.jp/{0}/login/login/?Length=5'.format(
-            tenant_code)
-        assert kwargs['data']['__RequestVerificationToken'] == token
-        assert kwargs['data']['OBCID'] == login_id
-        assert kwargs['data']['Password'] == password
+        assert args == expected_args
+        assert kwargs == expected_kwargs

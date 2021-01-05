@@ -56,7 +56,7 @@ class TestLoginTask():
         # Then
         expected_calls = [
             mocker.call.login_page.call(client),
-            mocker.call.check_auth_method.call(client, auth_info),
+            mocker.call.check_auth_method.call(client, token, auth_info),
             mocker.call.authenticate.call(client, token, auth_info),
             mocker.call.top_page.call(client, redirect_url)
         ]
